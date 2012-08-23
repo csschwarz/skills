@@ -1,7 +1,6 @@
 drop table if exists skilltab;
 create table skilltab (
-	id integer primary key autoincrement,
-	name string not null,
+	name string primary key,
 	category string not null
 );
 
@@ -16,12 +15,12 @@ create table user (
 
 drop table if exists userskill;
 create table userskill (
-	id integer primary key autoincrement,
 	userid integer not null,
-	skillid integer not null,
+	skill string not null,
 	score integer not null,
+	constraint user_skill_pk primary key (userid, skill),
 	constraint user_fk foreign key (userid) references user(id),
-	constraint skill_fk foreign key (skillid) references skilltab(id)
+	constraint skill_fk foreign key (skill) references skilltab(name)
 );
 
 -- Seed database:
@@ -31,8 +30,8 @@ insert into user(username, password, firstname, lastname) values ('admin', 'admi
 insert into skilltab(name, category) values ('Java', 'Programming');
 insert into skilltab(name, category) values ('Groovy', 'Programming');
 insert into skilltab(name, category) values ('Python', 'Programming');
-insert into skilltab(name, category) values ('Ruby', 'Programming');
-insert into skilltab(name, category) values ('Perl', 'Programming');
+-- insert into skilltab(name, category) values ('Ruby', 'Programming');
+-- insert into skilltab(name, category) values ('Perl', 'Programming');
 -- insert into skilltab(name, category) values ('Javascript', 'Programming');
 -- insert into skilltab(name, category) values ('F#', 'Programming');
 -- insert into skilltab(name, category) values ('C#', 'Programming');

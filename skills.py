@@ -57,7 +57,6 @@ def index():
 	if request.method == 'POST' and form.validate():
 		user = query_db('select count(*) as count from user where username=?', [request.form['username']], one=True)
 		if user['count'] == 1:
-			session['logged_in'] = True
 			session['username'] = request.form['username']
 			flash('Login successful!')
 			return redirect(url_for('form'))
@@ -66,6 +65,12 @@ def index():
 	elif request.method == 'POST':
 		error = "Can't leave any fields blank"
 	return render_template('index.html', form=form, error=error)
+
+@app.route('/logout')
+def logout():
+	session.pop('username', None)
+	flash('You were logged out')
+	return redirect(url_for('index'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -89,16 +94,30 @@ def register():
 
 @app.route('/form', methods=['GET', 'POST'])
 def form():
+	if not session.get('username'):
+		flash('You need to login first!')
+		return redirect(url_for('index'))
+
 	class F(Form):
 		pass
 
 	error = None
+	userid = query_db('select * from user where username=?', [session.get('username')], one=True)['id']
+	saved_skills = query_db('select skill, score from userskill where userid=?', [userid])
 	skillslist = query_db('select name from skilltab')
 	for item in skillslist:
 		setattr(F, item['name'], RadioField(item['name'], [validators.Required()], 
 				choices=[('1',''),('2',''),('3',''),('4',''),('5','')]))
 	form = F(request.form)
-	return render_template('form.html', form=form, error=error)
+	if request.method == 'POST' and form.validate():
+		for field in request.form:
+			g.db.execute('replace into userskill(userid, skill, score) values (?, ?, ?)',
+					[userid, field, request.form[field]])
+			g.db.commit()
+		flash('Saved successfully!')
+	elif request.method == 'POST':
+		error = "You didn't fill out the whole form. Please do that."
+	return render_template('form.html', form=form, saved_skills=saved_skills, error=error)
 
 ### END MAIN FORM ###
 
