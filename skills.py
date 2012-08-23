@@ -69,7 +69,7 @@ def index():
 @app.route('/logout')
 def logout():
 	session.pop('username', None)
-	flash('You were logged out')
+	flash('You have been logged out.')
 	return redirect(url_for('index'))
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -97,18 +97,23 @@ def form():
 	if not session.get('username'):
 		flash('You need to login first!')
 		return redirect(url_for('index'))
-
-	class F(Form):
-		pass
-
 	error = None
 	userid = query_db('select * from user where username=?', [session.get('username')], one=True)['id']
-	saved_skills = query_db('select skill, score from userskill where userid=?', [userid])
+	# Empty class to create form
+	class F(Form):
+		pass
+	# Empty class to repopulated form from saved data
+	class Saved:
+		pass
+
 	skillslist = query_db('select name from skilltab')
 	for item in skillslist:
 		setattr(F, item['name'], RadioField(item['name'], [validators.Required()], 
 				choices=[('1',''),('2',''),('3',''),('4',''),('5','')]))
-	form = F(request.form)
+	saved_skills = query_db('select skill, score from userskill where userid=?', [userid])
+	for item in saved_skills:
+		setattr(Saved, item['skill'], item['score'])
+	form = F(request.form, obj=Saved())
 	if request.method == 'POST' and form.validate():
 		for field in request.form:
 			g.db.execute('replace into userskill(userid, skill, score) values (?, ?, ?)',
