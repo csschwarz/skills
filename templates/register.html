@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+
+{% if error %}<p class=error><strong>Error:</strong> {{ error }}</p>{% endif %}
+<form action="{{ url_for('register') }}" method=post>
+	<div>{{ form.username.label }}: {{ form.username }}</div>
+	<div>{{ form.password.label }}: {{ form.password }}</div>
+	<div>{{ form.firstname.label }}: {{ form.firstname }}</div>
+	<div>{{ form.lastname.label }}: {{ form.lastname }}</div>
+	<div><input type=submit value=Submit></div>
+</form>
+<a href="{{ url_for('index') }}">Cancel</a>
+
+{% endblock %}

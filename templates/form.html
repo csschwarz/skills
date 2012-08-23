@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<form action="{{ url_for('form') }}" method=post>
+	<table>
+		<tr>
+			<th>Skill</th>
+			<th>1</th>
+			<th>2</th>
+			<th>3</th>
+			<th>4</th>
+			<th>5</th>
+		</tr>
+		{% for elem in form %}
+		<tr>
+			<td>{{ elem.label }}</td>
+			<td>{{ elem }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<input type=submit value=Submit>
+</form>
+
+{% endblock %}
