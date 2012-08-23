@@ -31,8 +31,8 @@ insert into user(username, password, firstname, lastname) values ('admin', 'admi
 insert into skilltab(name, category) values ('Java', 'Programming');
 insert into skilltab(name, category) values ('Groovy', 'Programming');
 insert into skilltab(name, category) values ('Python', 'Programming');
--- insert into skilltab(name, category) values ('Ruby', 'Programming');
--- insert into skilltab(name, category) values ('Perl', 'Programming');
+insert into skilltab(name, category) values ('Ruby', 'Programming');
+insert into skilltab(name, category) values ('Perl', 'Programming');
 -- insert into skilltab(name, category) values ('Javascript', 'Programming');
 -- insert into skilltab(name, category) values ('F#', 'Programming');
 -- insert into skilltab(name, category) values ('C#', 'Programming');

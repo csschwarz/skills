@@ -14,7 +14,7 @@
 		{% for elem in form %}
 		<tr>
 			<td>{{ elem.label }}</td>
-			<td>{{ elem }}</td>
+			{% for radio in elem %}<td>{{ radio }}</td>{% endfor %}
 		</tr>
 		{% endfor %}
 	</table>
