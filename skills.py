@@ -76,14 +76,14 @@ def index():
 		error = "Can't leave any fields blank"
 	return render_template('index.html', form=form, error=error)
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
 	session.pop('username', None)
 	session.pop('isadmin', None)
 	flash('You have been logged out.')
 	return redirect(url_for('index'))
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register/', methods=['GET', 'POST'])
 def register():
 	form = RegistrationForm(request.form)
 	error = None
@@ -146,15 +146,22 @@ def form(pagenum):
 ### END MAIN FORM ###
 ### BEGIN ADMIN ###
 
-@app.route('/admin')
+@app.route('/admin/')
 def admin():
 	if not session.get('isadmin'):
 		abort(401)
-	users = query_db('select distinct username, firstname, lastname from user \
+	users = query_db('select distinct id, username, firstname, lastname from user \
 		join userskill on user.id=userskill.userid')
 	allskills = query_db('select name, category from skilltab order by category, name')
-	print str(allskills)
 	return render_template('admin_index.html', users=users, allskills=allskills)
+
+@app.route('/admin/viewuser/<int:userid>')
+def admin_userstats(userid):
+	if not session.get('isadmin'):
+		abort(401)
+	user = query_db('select * from user where id=?', [userid], one=True)
+	skills = query_db('select skill, score from userskill where userid=?', [userid])
+	return render_template('admin_userstats.html', user=user, skills=skills)
 
 ### END ADMIN ###
 
