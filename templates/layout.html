@@ -4,7 +4,7 @@
 <div class=page>
 	<h1>Skills</h1>
 	{% for message in get_flashed_messages() %}
-		<div class=flash>{{ message }}</div>
+		<p class=flash>{{ message }}</p>
 	{% endfor %}
 
 	{% block body %}{% endblock %}

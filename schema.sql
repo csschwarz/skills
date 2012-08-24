@@ -10,7 +10,8 @@ create table user (
 	username string unique not null,
 	password string not null,
 	firstname string,
-	lastname string
+	lastname string,
+	isadmin integer not null default 0
 );
 
 drop table if exists userskill;
@@ -25,8 +26,8 @@ create table userskill (
 
 -- Seed database:
 
-insert into user(username, password, firstname, lastname) values ('admin', 'admin', 'Admin', 'Adminson');
-insert into user(username, password, firstname, lastname) values ('default', 'default', 'Normal', 'User');
+insert into user(username, password, firstname, lastname, isadmin) values ('admin', 'admin', 'Admin', 'Adminson', 1);
+insert into user(username, password, firstname, lastname) values ('default', 'd', 'Normal', 'User');
 
 insert into skilltab(name, category) values ('Java', 'Programming');
 insert into skilltab(name, category) values ('Groovy', 'Programming');

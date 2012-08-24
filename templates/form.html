@@ -28,11 +28,13 @@
 </form>
 {% if pagenum > 0 %}
 	<a href="{{ url_for('form', pagenum=pagenum-1) }}">Back</a>
+{% else %}
+	Back
 {% endif %}
 {% if pagenum < categories|length-1 %}
 	<a href="{{ url_for('form', pagenum=pagenum+1) }}">Skip</a>
 {% else %}
-	<a href="{{ url_for('logout') }}">Skip and Exit</a>
+	<a href="{{ url_for('logout') }}">Skip (and Exit)</a>
 {% endif %}
 
 {% endblock %}

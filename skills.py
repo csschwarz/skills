@@ -54,12 +54,22 @@ class RegistrationForm(LoginForm):
 def index():
 	form = LoginForm(request.form)
 	error = None
+	if session.get('username') and session.get('isadmin'):
+		return redirect(url_for('admin'))
+	elif session.get('username'):
+		return redirect(url_for('form', pagenum=0))
 	if request.method == 'POST' and form.validate():
-		user = query_db('select count(*) as count from user where username=?', [request.form['username']], one=True)
-		if user['count'] == 1:
+		user = query_db('select * from user where username=? and password=?', 
+				[request.form['username'], request.form['password']], one=True)
+		if not user is None:
 			session['username'] = request.form['username']
+			session.pop('isadmin', None)
 			flash('Login successful!')
-			return redirect(url_for('form', pagenum=0))
+			if user['isadmin']:
+				session['isadmin'] = True
+				return redirect(url_for('admin'))
+			else:
+				return redirect(url_for('form', pagenum=0))
 		else:
 			error = 'Invalid username or password'
 	elif request.method == 'POST':
@@ -69,6 +79,7 @@ def index():
 @app.route('/logout')
 def logout():
 	session.pop('username', None)
+	session.pop('isadmin', None)
 	flash('You have been logged out.')
 	return redirect(url_for('index'))
 
@@ -110,7 +121,7 @@ def form(pagenum):
 	class Saved:
 		pass
 
-	skillslist = query_db('select name from skilltab where category=?', [categories[pagenum]])
+	skillslist = query_db('select name from skilltab where category=? order by name', [categories[pagenum]])
 	for item in skillslist:
 		setattr(F, item['name'], RadioField(item['name'], [validators.Required()], 
 				choices=[('1',''),('2',''),('3',''),('4',''),('5','')]))
@@ -127,12 +138,21 @@ def form(pagenum):
 		if pagenum < len(categories)-1:
 			return redirect(url_for('form', pagenum=pagenum+1))
 		else:
-			return redirect(url_for('index'))
+			return redirect(url_for('logout'))
 	elif request.method == 'POST':
 		error = "You didn't fill out the whole form. Please do that."
 	return render_template('form.html', form=form, categories=categories, pagenum=pagenum, error=error)
 
 ### END MAIN FORM ###
+### BEGIN ADMIN ###
+
+@app.route('/admin')
+def admin():
+	if not session.get('isadmin'):
+		abort(401)
+	return render_template('admin_index.html')
+
+### END ADMIN ###
 
 if __name__ == '__main__':
 	app.run()
