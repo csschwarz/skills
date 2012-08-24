@@ -150,7 +150,11 @@ def form(pagenum):
 def admin():
 	if not session.get('isadmin'):
 		abort(401)
-	return render_template('admin_index.html')
+	users = query_db('select distinct username, firstname, lastname from user \
+		join userskill on user.id=userskill.userid')
+	allskills = query_db('select name, category from skilltab order by category, name')
+	print str(allskills)
+	return render_template('admin_index.html', users=users, allskills=allskills)
 
 ### END ADMIN ###
 

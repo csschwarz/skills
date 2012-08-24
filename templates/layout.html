@@ -6,6 +6,8 @@
 	{% for message in get_flashed_messages() %}
 		<p class=flash>{{ message }}</p>
 	{% endfor %}
-
+	{% if session.get('username') %}
+		<h3>User: {{ session.get('username') }} [<a href="{{ url_for('logout') }}">logout</a>]</h3>
+	{% endif %}
 	{% block body %}{% endblock %}
 </div>

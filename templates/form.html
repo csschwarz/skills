@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<h3>User: {{ session.get('username') }} [<a href="{{ url_for('logout') }}">logout</a>]</h3>
 <h2>{{ categories[pagenum] }} ({{ pagenum+1 }} of {{ categories|length }})</h2>
 
 {% if error %}<p class=error><strong>Error:</strong> {{ error }}</p>{% endif %}
