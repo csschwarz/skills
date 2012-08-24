@@ -59,7 +59,7 @@ def index():
 		if user['count'] == 1:
 			session['username'] = request.form['username']
 			flash('Login successful!')
-			return redirect(url_for('form'))
+			return redirect(url_for('form', pagenum=0))
 		else:
 			error = 'Invalid username or password'
 	elif request.method == 'POST':
@@ -92,21 +92,25 @@ def register():
 ### END LOGIN & REGISTRATION ###
 ### BEGIN MAIN FORM ###
 
-@app.route('/form', methods=['GET', 'POST'])
-def form():
+@app.route('/form/<int:pagenum>', methods=['GET', 'POST'])
+def form(pagenum):
 	if not session.get('username'):
 		flash('You need to login first!')
 		return redirect(url_for('index'))
 	error = None
+	categories = [item['category'] for item in query_db('select category from skilltab group by category order by category')]
+	if not 0 <= pagenum < len(categories):
+		flash('Not a valid page.')
+		return redirect(url_for('index'))
 	userid = query_db('select * from user where username=?', [session.get('username')], one=True)['id']
 	# Empty class to create form
 	class F(Form):
 		pass
-	# Empty class to repopulated form from saved data
+	# Empty class to repopulate form from saved data
 	class Saved:
 		pass
 
-	skillslist = query_db('select name from skilltab')
+	skillslist = query_db('select name from skilltab where category=?', [categories[pagenum]])
 	for item in skillslist:
 		setattr(F, item['name'], RadioField(item['name'], [validators.Required()], 
 				choices=[('1',''),('2',''),('3',''),('4',''),('5','')]))
@@ -120,9 +124,13 @@ def form():
 					[userid, field, request.form[field]])
 			g.db.commit()
 		flash('Saved successfully!')
+		if pagenum < len(categories)-1:
+			return redirect(url_for('form', pagenum=pagenum+1))
+		else:
+			return redirect(url_for('index'))
 	elif request.method == 'POST':
 		error = "You didn't fill out the whole form. Please do that."
-	return render_template('form.html', form=form, saved_skills=saved_skills, error=error)
+	return render_template('form.html', form=form, categories=categories, pagenum=pagenum, error=error)
 
 ### END MAIN FORM ###
 

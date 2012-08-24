@@ -26,6 +26,7 @@ create table userskill (
 -- Seed database:
 
 insert into user(username, password, firstname, lastname) values ('admin', 'admin', 'Admin', 'Adminson');
+insert into user(username, password, firstname, lastname) values ('default', 'default', 'Normal', 'User');
 
 insert into skilltab(name, category) values ('Java', 'Programming');
 insert into skilltab(name, category) values ('Groovy', 'Programming');
@@ -47,3 +48,25 @@ insert into skilltab(name, category) values ('Python', 'Programming');
 -- insert into skilltab(name, category) values ('Scala', 'Programming');
 -- insert into skilltab(name, category) values ('CSS', 'Programming');
 -- insert into skilltab(name, category) values ('JSP', 'Programming');
+insert into skilltab(name, category) values ('English', 'Language');
+insert into skilltab(name, category) values ('Portuguese', 'Language');
+insert into skilltab(name, category) values ('Spanish', 'Language');
+-- insert into skilltab(name, category) values ('Hindi', 'Language');
+-- insert into skilltab(name, category) values ('Mandarin', 'Language');
+-- insert into skilltab(name, category) values ('Cantonese', 'Language');
+-- insert into skilltab(name, category) values ('Arabic', 'Language');
+-- insert into skilltab(name, category) values ('French', 'Language');
+-- insert into skilltab(name, category) values ('German', 'Language');
+-- insert into skilltab(name, category) values ('Italian', 'Language');
+-- insert into skilltab(name, category) values ('Afrikaans', 'Language');
+-- insert into skilltab(name, category) values ('Dutch', 'Language');
+-- insert into skilltab(name, category) values ('Malay', 'Language');
+insert into skilltab(name, category) values ('Test strategy creation', 'Testing');
+insert into skilltab(name, category) values ('Build automated test frameworks', 'Testing');
+insert into skilltab(name, category) values ('Manual Testing', 'Testing');
+-- insert into skilltab(name, category) values ('Load testing', 'Testing');
+-- insert into skilltab(name, category) values ('Cucumber', 'Testing');
+-- insert into skilltab(name, category) values ('Selenium', 'Testing');
+-- insert into skilltab(name, category) values ('QTP', 'Testing');
+-- insert into skilltab(name, category) values ('JMeter', 'Testing');
+-- insert into skilltab(name, category) values ('Performance testing', 'Testing');
