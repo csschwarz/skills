@@ -1,6 +1,33 @@
 {% extends "layout.html" %}
 {% block body %}
 
-Userstats.
+<h3>{{ user['firstname'] }} {{ user['lastname'] }}</h3>
+{% for category in categories %}
+	<hr>
+	<div>
+		<p>
+			<strong>{{ category }}</strong>
+		</p>
+		{% if skills[category]|length %}
+			<table>
+				<tr>
+					<th>Skill</th>
+					<th>Score</th>
+				</tr>
+				{% for skill in skills[category] %}
+				<tr>
+					<td>{{ skill['skill'] }}</td>
+					<td>{{ skill['score'] }}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		{% else %}
+			<p>This section hasn't been filled out yet.</p>
+		{% endif %}
+	</div>
+{% endfor %}
+<hr>
+
+<a href="{{ url_for('admin') }}">Back</a>
 
 {% endblock %}

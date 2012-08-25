@@ -150,8 +150,8 @@ def form(pagenum):
 def admin():
 	if not session.get('isadmin'):
 		abort(401)
-	users = query_db('select distinct id, username, firstname, lastname from user \
-		join userskill on user.id=userskill.userid')
+	users = query_db('select id, username, firstname, lastname from user where id in \
+		(select distinct userid from userskill) order by lastname')
 	allskills = query_db('select name, category from skilltab order by category, name')
 	return render_template('admin_index.html', users=users, allskills=allskills)
 
@@ -160,8 +160,13 @@ def admin_userstats(userid):
 	if not session.get('isadmin'):
 		abort(401)
 	user = query_db('select * from user where id=?', [userid], one=True)
-	skills = query_db('select skill, score from userskill where userid=?', [userid])
-	return render_template('admin_userstats.html', user=user, skills=skills)
+	categories = [item['category'] for item in query_db('select category from skilltab group by category order by category')]
+	skills = dict()
+	for category in categories:
+		skills[category] = query_db('select u.skill, u.score from userskill as u \
+			join skilltab as s on u.skill=s.name where u.userid=? and s.category=? order by u.score desc', [userid, category])
+	print str(skills)
+	return render_template('admin_userstats.html', user=user, skills=skills, categories=categories)
 
 ### END ADMIN ###
 

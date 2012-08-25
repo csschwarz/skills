@@ -1,37 +1,41 @@
 {% extends "layout.html" %}
 {% block body %}
-
-<strong>All Users</strong>
-<table>
-	<tr>
-		<th>Username</th>
-		<th>First Name</th>
-		<th>Last Name</th>
-	</tr>
-	{% for user in users %}
-	<tr>
-		<td><a href="{{ url_for('admin_userstats', userid=user['id']) }}">{{ user['username'] }}</a></td>
-		<td>{{ user['firstname'] }}</td>
-		<td>{{ user['lastname'] }}</td>
-	</tr>
-	{% else %}
-	<tr>
-		<td>No users.</td>
-	</tr>
-	{% endfor %}
-</table>
-
-<strong>All Skills</strong>
-<table>
-	<tr>
-		<th>Skill</th>
-		<th>Category</th>
-	</tr>
-	{% for skill in allskills %}
-	<tr>
-		<td>{{ skill['name'] }}</td>
-		<td>{{ skill['category'] }}</td>
-	</tr>
-	{% endfor %}
-
+<hr>
+<div>
+	<strong>All Users</strong>
+	<table>
+		<tr>
+			<th>Username</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+		</tr>
+		{% for user in users %}
+		<tr>
+			<td><a href="{{ url_for('admin_userstats', userid=user['id']) }}">{{ user['username'] }}</a></td>
+			<td>{{ user['firstname'] }}</td>
+			<td>{{ user['lastname'] }}</td>
+		</tr>
+		{% else %}
+		<tr>
+			<td>No users.</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+<hr>
+<div>
+	<strong>All Skills</strong>
+	<table>
+		<tr>
+			<th>Skill</th>
+			<th>Category</th>
+		</tr>
+		{% for skill in allskills %}
+		<tr>
+			<td>{{ skill['name'] }}</td>
+			<td>{{ skill['category'] }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
 {% endblock %}
