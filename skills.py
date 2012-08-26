@@ -113,6 +113,7 @@ def form(pagenum):
 	if not 0 <= pagenum < len(categories):
 		flash('Not a valid page.')
 		return redirect(url_for('index'))
+	scoredesc = {elem['score']: elem['description'] for elem in query_db('select * from scoredescription order by score')}
 	userid = query_db('select * from user where username=?', [session.get('username')], one=True)['id']
 	# Empty class to create form
 	class F(Form):
@@ -141,7 +142,7 @@ def form(pagenum):
 			return redirect(url_for('logout'))
 	elif request.method == 'POST':
 		error = "You didn't fill out the whole form. Please do that."
-	return render_template('form.html', form=form, categories=categories, pagenum=pagenum, error=error)
+	return render_template('form.html', form=form, categories=categories, pagenum=pagenum, scoredesc=scoredesc, error=error)
 
 ### END MAIN FORM ###
 ### BEGIN ADMIN ###

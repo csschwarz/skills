@@ -7,17 +7,17 @@
 	<table>
 		<tr>
 			<th>Skill</th>
-			<th>1</th>
-			<th>2</th>
-			<th>3</th>
-			<th>4</th>
-			<th>5</th>
+			<th>{{ scoredesc[1] }}</th>
+			<th>{{ scoredesc[2] }}</th>
+			<th>{{ scoredesc[3] }}</th>
+			<th>{{ scoredesc[4] }}</th>
+			<th>{{ scoredesc[5] }}</th>
 			<th class=tblerror></th>
 		</tr>
 		{% for elem in form %}
 		<tr>
 			<td>{{ elem.label.text }}</td>
-			{% for radio in elem %}<td>{{ radio }}</td>{% endfor %}
+			{% for radio in elem %}<td class=column>{{ radio }}</td>{% endfor %}
 			<td class=tblerror>{% for error in form[elem.name].errors %}{{ error }}{% endfor %}</td>
 		</tr>
 		{% endfor %}
