@@ -32,7 +32,7 @@
 		</tr>
 		{% for skill in allskills %}
 		<tr>
-			<td>{{ skill['name'] }}</td>
+			<td><a href="{{ url_for('admin_skillstats', skill=skill['name']) }}">{{ skill['name'] }}</a></td>
 			<td>{{ skill['category'] }}</td>
 		</tr>
 		{% endfor %}

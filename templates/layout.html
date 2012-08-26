@@ -1,13 +1,19 @@
 <!doctype html>
-<title>Skills</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-<div class=page>
-	<h1>Skills</h1>
-	{% for message in get_flashed_messages() %}
-		<p class=flash>{{ message }}</p>
-	{% endfor %}
-	{% if session.get('username') %}
-		<h3>User: {{ session.get('username') }} [<a href="{{ url_for('logout') }}">logout</a>]</h3>
-	{% endif %}
-	{% block body %}{% endblock %}
-</div>
+<html>
+	<head>
+		<title>Skills</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	</head>
+	<body>
+		<div class=page>
+			<h1>Skills</h1>
+			{% for message in get_flashed_messages() %}
+				<p class=flash>{{ message }}</p>
+			{% endfor %}
+			{% if session.get('username') %}
+				<h3>User: {{ session.get('username') }} [<a href="{{ url_for('logout') }}">logout</a>]</h3>
+			{% endif %}
+			{% block body %}{% endblock %}
+		</div>
+	</body>
+</html>

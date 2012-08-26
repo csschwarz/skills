@@ -12,13 +12,13 @@
 			<th>3</th>
 			<th>4</th>
 			<th>5</th>
-			<th></th>
+			<th class=tblerror></th>
 		</tr>
 		{% for elem in form %}
 		<tr>
-			<td>{{ elem.label }}</td>
+			<td>{{ elem.label.text }}</td>
 			{% for radio in elem %}<td>{{ radio }}</td>{% endfor %}
-			<td>{% for error in form[elem.name].errors %}{{ error }}{% endfor %}</td>
+			<td class=tblerror>{% for error in form[elem.name].errors %}{{ error }}{% endfor %}</td>
 		</tr>
 		{% endfor %}
 	</table>

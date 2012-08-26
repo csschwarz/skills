@@ -14,6 +14,12 @@ create table user (
 	isadmin integer not null default 0
 );
 
+drop table if exists scoredescription;
+create table scoredescription (
+	score integer primary key,
+	description string not null
+);
+
 drop table if exists userskill;
 create table userskill (
 	userid integer not null,
@@ -21,7 +27,8 @@ create table userskill (
 	score integer not null,
 	constraint user_skill_pk primary key (userid, skill),
 	constraint user_fk foreign key (userid) references user(id),
-	constraint skill_fk foreign key (skill) references skilltab(name)
+	constraint skill_fk foreign key (skill) references skilltab(name),
+	constraint score_fk foreign key (score) references scoredescription(score)
 );
 
 -- Seed database:
@@ -30,6 +37,12 @@ insert into user(username, password, firstname, lastname, isadmin) values ('admi
 insert into user(username, password, firstname, lastname) values ('default', 'd', 'Normal', 'User');
 insert into user(username, password, firstname, lastname) values ('test', 't', 'Test', 'User');
 insert into user(username, password, firstname, lastname) values ('test2', 't', 'Test', 'User 2');
+
+insert into scoredescription(score, description) values (1, 'Don''t know it');
+insert into scoredescription(score, description) values (2, 'Want to learn it');
+insert into scoredescription(score, description) values (3, 'Know it');
+insert into scoredescription(score, description) values (4, 'Can do it alone');
+insert into scoredescription(score, description) values (5, 'Can teach it');
 
 insert into skilltab(name, category) values ('Java', 'Programming');
 insert into skilltab(name, category) values ('Groovy', 'Programming');
