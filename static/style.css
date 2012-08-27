@@ -19,7 +19,7 @@ table th {
 table .column {
 	width: 5em;
 }
-table td.tblerror, th.tblerror {
+table .tblerror {
 	border: none;
 	background-color: transparent;
 	width: auto;
