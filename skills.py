@@ -17,9 +17,9 @@ def connect_db():
 	return sqlite3.connect(app.config['DATABASE'])
 
 # Use this from the shell to setup database
-def init_db():
+def init_db(test=False):
 	with closing(connect_db()) as db:
-		with app.open_resource('schema.sql') as f:
+		with app.open_resource('test_schema.sql' if test else 'schema.sql') as f:
 			db.cursor().executescript(f.read())
 		db.commit()
 

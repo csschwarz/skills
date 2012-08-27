@@ -2,6 +2,7 @@ import os
 import skills
 import unittest
 import tempfile
+import flask
 
 class SkillsTestCase(unittest.TestCase):
 
@@ -11,7 +12,7 @@ class SkillsTestCase(unittest.TestCase):
 		self.db_fd, skills.app.config['DATABASE'] = tempfile.mkstemp()
 		skills.app.config['TESTING'] = True
 		self.app = skills.app.test_client()
-		skills.init_db()
+		skills.init_db(test=True)
 
 	def tearDown(self):
 		os.close(self.db_fd)
@@ -59,7 +60,12 @@ class SkillsTestCase(unittest.TestCase):
 
 	def test_valid_form_validation_succeeds(self):
 		self.with_normal_user()
-		#rv = self.app.post()
+		rv = self.app.post('/form/0', data=dict(
+			English=5,
+			Portuguese=1,
+			Spanish=3
+		), follow_redirects=True)
+		assert '(2 of ' in rv.data
 		self.logout()
 
 ### END TESTS ###
