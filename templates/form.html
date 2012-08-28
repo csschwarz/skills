@@ -2,7 +2,17 @@
 {% block body %}
 {% if error %}<p class=error><strong>Error:</strong> {{ error }}</p>{% endif %}
 
-<h2>{{ categories[pagenum] }} ({{ pagenum+1 }} of {{ categories|length }})</h2>
+<h2>
+	{% for i in range(categories|length) %}
+		{% if not i==pagenum %}
+			<a href="{{ url_for('form', pagenum=i) }}">{{ categories[i] }}</a>
+		{% else %}
+			{{ categories[i] }}
+		{% endif %} 
+		{% if i<categories|length-1 %} > {% endif %}
+	{% endfor %}
+</h2>
+<p><strong>Not relevant?</strong> If these skills don't apply to you, you can skip this section.</p>
 <form action="{{ url_for('form', pagenum=pagenum) }}" method=post>
 	<table>
 		<tr>
@@ -24,6 +34,7 @@
 	</table>
 	<input type=submit value="Save and {% if pagenum<categories|length-1 %}Continue{% else %}Exit{% endif %}">
 </form>
+<!--
 {% if pagenum > 0 %}
 	<a href="{{ url_for('form', pagenum=pagenum-1) }}">Back</a>
 {% else %}
@@ -34,5 +45,5 @@
 {% else %}
 	<a href="{{ url_for('logout') }}">Skip (and Exit)</a>
 {% endif %}
-
+-->
 {% endblock %}

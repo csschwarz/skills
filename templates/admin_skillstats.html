@@ -13,7 +13,7 @@
 		{% for user in users %}
 		<tr>
 			<td>{{ user['firstname'] }} {{ user['lastname'] }}</td>
-			<td>{{ user['score'] }} ({{ scoredesc[user['score']] }})</td>
+			<td class="score">{{ user['score'] }} ({{ scoredesc[user['score']] }})</td>
 		</tr>
 		{% endfor %}
 	</table>

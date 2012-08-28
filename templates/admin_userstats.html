@@ -20,7 +20,7 @@
 				{% for skill in skills[category] %}
 				<tr>
 					<td>{{ skill['skill'] }}</td>
-					<td>{{ skill['score'] }} ({{ scoredesc[skill['score']] }})</td>
+					<td class="score">{{ skill['score'] }} ({{ scoredesc[skill['score']] }})</td>
 				</tr>
 				{% endfor %}
 			</table>
