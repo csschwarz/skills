@@ -9,7 +9,7 @@
 		{% else %}
 			{{ categories[i] }}
 		{% endif %} 
-		{% if i<categories|length-1 %} > {% endif %}
+		{% if i<categories|length-1 %} | {% endif %}
 	{% endfor %}
 </h2>
 <p><strong>Not relevant?</strong> If these skills don't apply to you, you can skip this section.</p>

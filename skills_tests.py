@@ -65,7 +65,7 @@ class SkillsTestCase(unittest.TestCase):
 			Portuguese=1,
 			Spanish=3
 		), follow_redirects=True)
-		assert '(2 of ' in rv.data
+		assert '/form/0' in rv.data
 		self.logout()
 
 ### END TESTS ###
