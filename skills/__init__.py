@@ -43,6 +43,3 @@ def teardown_request(exception):
 import skills.login
 import skills.forms
 import skills.admin
-
-if __name__ == '__main__':
-	app.run()

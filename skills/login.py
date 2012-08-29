@@ -1,6 +1,6 @@
 from skills import app, query_db
-from wtforms import Form, TextField, RadioField, validators, PasswordField
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from wtforms import Form, TextField, RadioField, validators, PasswordField
 
 class LoginForm(Form):
 	username = TextField('username', [validators.Required()])
