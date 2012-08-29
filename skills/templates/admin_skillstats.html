@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<h3>{{ skillname }}</h3>
+
+<p>
+{% if users|length %}
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Score</th>
+		</tr>
+		{% for user in users %}
+		<tr>
+			<td>{{ user['firstname'] }} {{ user['lastname'] }}</td>
+			<td class="score">{{ user['score'] }} ({{ scoredesc[user['score']] }})</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% else %}
+	No one has this skill.
+{% endif %}
+</p>
+
+<a href="{{ url_for('admin') }}">Back</a>
+
+{% endblock %}
