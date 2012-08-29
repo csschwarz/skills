@@ -1,5 +1,6 @@
-from skills import app, query_db
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from skills import app, db
+from skills.models import User
+from flask import Flask, request, session, redirect, url_for, abort, render_template, flash
 from wtforms import Form, TextField, RadioField, validators, PasswordField
 
 class LoginForm(Form):
@@ -19,13 +20,12 @@ def index():
 	elif session.get('username'):
 		return redirect(url_for('form', pagenum=0))
 	if request.method == 'POST' and form.validate():
-		user = query_db('select * from user where username=? and password=?', 
-				[request.form['username'], request.form['password']], one=True)
+		user = User.query.filter_by(username=request.form['username'], password=request.form['password']).first()
 		if not user is None:
 			session['username'] = request.form['username']
 			session.pop('isadmin', None)
 			flash('Login successful!')
-			if user['isadmin']:
+			if user.isadmin:
 				session['isadmin'] = True
 				return redirect(url_for('admin'))
 			else:
@@ -48,12 +48,13 @@ def register():
 	form = RegistrationForm(request.form)
 	error = None
 	if request.method == 'POST' and form.validate():
-		if query_db('select count(*) as count from user where username=?', [request.form['username']], one=True)['count']:
+		if User.query.filter_by(username=request.form['username']).count():
 			error = "Username already taken"
 		else:
-			g.db.execute('insert into user(username, password, firstname, lastname) values(?, ?, ?, ?)',
-					[request.form['username'], request.form['password'], request.form['firstname'], request.form['lastname']])
-			g.db.commit()
+			newuser = User(request.form['username'], request.form['password'], 
+					request.form['firstname'], request.form['lastname'])
+			db.session.add(newuser)
+			db.session.commit()
 			flash('Registration successful!')
 			return redirect(url_for('index'))
 	elif request.method == 'POST':

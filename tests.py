@@ -6,7 +6,7 @@ import flask
 
 class SkillsTestCase(unittest.TestCase):
 
-### BEGIN SETUP AND UTILS ###
+### BEGIN SETUP ###
 
 	def setUp(self):
 		self.db_fd, skills.app.config['DATABASE'] = tempfile.mkstemp()
@@ -33,7 +33,7 @@ class SkillsTestCase(unittest.TestCase):
 	def with_admin_user(self):
 		return self.login('admin', 'admin')
 
-### END SETUP AND UTILS ###
+### END SETUP ###
 ### BEGIN TESTS ###
 
 	def test_nonadmin_login_logout(self):
