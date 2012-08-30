@@ -20,8 +20,8 @@ def admin_userstats(userid):
 	skills = dict()
 	for category in categories:
 		skills[category] = db.session.query(UserSkill.skill, UserSkill.score).\
-											 join(Skill).filter(UserSkill.userid == userid, Skill.category == category).\
-											 order_by(UserSkill.score.desc()).all()
+											join(Skill).filter(UserSkill.userid == userid, Skill.category == category).\
+											order_by(UserSkill.score.desc()).all()
 	return render_template('admin_userstats.html', user=user, skills=skills, categories=categories, scoredesc=scoredesc)
 
 @app.route('/admin/viewskill/<skill>')

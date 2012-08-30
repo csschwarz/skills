@@ -1,7 +1,6 @@
 from __future__ import with_statement
 from contextlib import closing
-import sqlite3
-from flask import Flask, g
+from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/skills.db'
