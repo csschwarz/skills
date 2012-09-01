@@ -11,9 +11,9 @@
 		</tr>
 		{% for user in users %}
 		<tr>
-			<td><a href="{{ url_for('admin_userstats', userid=user['id']) }}">{{ user['username'] }}</a></td>
-			<td>{{ user['firstname'] }}</td>
-			<td>{{ user['lastname'] }}</td>
+			<td><a href="{{ url_for('admin_userstats', username=user.username) }}">{{ user.username }}</a></td>
+			<td>{{ user.firstname }}</td>
+			<td>{{ user.lastname }}</td>
 		</tr>
 		{% else %}
 		<tr>
@@ -30,11 +30,13 @@
 			<th>Skill</th>
 			<th>Category</th>
 		</tr>
-		{% for skill in allskills %}
+		{% for category in allskills %}
+		{% for skill in category.skills %}
 		<tr>
-			<td><a href="{{ url_for('admin_skillstats', skill=skill['name']) }}">{{ skill['name'] }}</a></td>
-			<td>{{ skill['category'] }}</td>
+			<td><a href="{{ url_for('admin_skillstats', skill=skill) }}">{{ skill }}</a></td>
+			<td>{{ category.name }}</td>
 		</tr>
+		{% endfor %}
 		{% endfor %}
 	</table>
 </div>

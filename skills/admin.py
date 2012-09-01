@@ -1,34 +1,34 @@
 from skills import app, db
-from skills.models import User, Skill, UserSkill, ScoreDescription
+from skills.models import *
 from flask import Flask, request, session, redirect, url_for, abort, render_template, flash
 
 @app.route('/admin/')
 def admin():
 	if not session.get('isadmin'):
 		abort(401)
-	users = User.query.filter(User.id.in_(db.session.query(UserSkill.userid).distinct(UserSkill.userid))).all()
-	allskills = db.session.query(Skill.name, Skill.category).order_by(Skill.category, Skill.name).all()
+	users = User.objects(skills__not__size=0).order_by('lastname')
+	allskills = Category.objects
 	return render_template('admin_index.html', users=users, allskills=allskills)
 
-@app.route('/admin/viewuser/<int:userid>')
-def admin_userstats(userid):
+@app.route('/admin/viewuser/<username>')
+def admin_userstats(username):
 	if not session.get('isadmin'):
 		abort(401)
-	scoredesc = {elem.score: elem.description for elem in ScoreDescription.query.order_by(ScoreDescription.score).all()}
-	user = User.query.get(userid)
-	categories = [item.category for item in Skill.query.group_by(Skill.category).order_by(Skill.category).all()]
-	skills = dict()
-	for category in categories:
-		skills[category] = db.session.query(UserSkill.skill, UserSkill.score).\
-											join(Skill).filter(UserSkill.userid == userid, Skill.category == category).\
-											order_by(UserSkill.score.desc()).all()
+	scoredesc = {item.score: item.description for item in ScoreDescription.objects}
+	user = User.objects(username=username).get()
+	categories = [item.name for item in Category.objects.only('name')]
+	skills = sorted(user.skills, key=lambda skill: skill['score'], reverse=True)
+	skills = sorted(skills, key=lambda skill: skill['category'])
 	return render_template('admin_userstats.html', user=user, skills=skills, categories=categories, scoredesc=scoredesc)
 
 @app.route('/admin/viewskill/<skill>')
 def admin_skillstats(skill):
 	if not session.get('isadmin'):
 		abort(401)
-	scoredesc = {elem.score: elem.description for elem in ScoreDescription.query.order_by(ScoreDescription.score).all()}
-	users = db.session.query(User.firstname, User.lastname, UserSkill.score).\
-			join(UserSkill).filter_by(skill=skill).order_by(UserSkill.score.desc()).all()
-	return render_template('admin_skillstats.html', skillname=skill, users=users, scoredesc=scoredesc)
+	scoredesc = {item.score: item.description for item in ScoreDescription.objects}
+	users = User.objects(skills__name=skill)
+	userskills = []
+	for user in users:
+		userskills.append((user, [ x for x in user.skills if x.name==skill ]))
+	userskills = sorted(userskills, key=lambda userskill: userskill[1][0].score, reverse=True)
+	return render_template('admin_skillstats.html', skillname=skill, userskills=userskills, scoredesc=scoredesc)

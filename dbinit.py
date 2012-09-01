@@ -1,30 +1,29 @@
-from skills import db
 from skills.models import *
 
-db.drop_all()
-db.create_all()
+User.drop_collection()
+Category.drop_collection()
+ScoreDescription.drop_collection()
 
-test = User('test', 't', 'Test', 'User')
-admin = User('admin', 'admin', 'Admin', 'Adminson', 1)
-db.session.add(test)
-db.session.add(admin)
+User(username='test', password='t', firstname='Test', lastname='User').save()
+User(username='test2', password='t', firstname='Test', lastname='User 2').save()
+User(username='admin', password='admin', firstname='Admin', lastname='Adminson', isadmin=True).save()
 
-skill = Skill('Java', 'Programming')
-skill2 = Skill('Groovy', 'Programming')
-db.session.add(skill)
-db.session.add(skill2)
+ScoreDescription(score=1, description="1 Desc").save()
+ScoreDescription(score=2, description="2 Desc").save()
+ScoreDescription(score=3, description="3 Desc").save()
+ScoreDescription(score=4, description="4 Desc").save()
+ScoreDescription(score=5, description="5 Desc").save()
 
-sd1 = ScoreDescription(1, 'Don\'t know it')
-sd2 = ScoreDescription(2, 'Want to learn it')
-sd3 = ScoreDescription(3, 'Know it')
-sd4 = ScoreDescription(4, 'Can do it alone')
-sd5 = ScoreDescription(5, 'Can teach it')
-db.session.add(sd1)
-db.session.add(sd2)
-db.session.add(sd3)
-db.session.add(sd4)
-db.session.add(sd5)
+testing_skills = [
+	'Cucumber',
+	'Selenium',
+	'Manual Testing'
+]
+programming_skills = [
+	'Java',
+	'Groovy',
+	'Python'
+]
 
-db.session.execute('insert into user_skill(userid, skill, score) values (1, "Java", 3)')
-
-db.session.commit()
+Category(name='Testing', skills=testing_skills).save()
+Category(name='Programming', skills=programming_skills).save()

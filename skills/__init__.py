@@ -1,19 +1,13 @@
-from __future__ import with_statement
-from contextlib import closing
 from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.mongoengine import MongoEngine
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/skills.db'
-DEBUG = True
+MONGODB_DB = 'hacksaw'
 SECRET_KEY = 'dev key'
+DEBUG = True
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-db = SQLAlchemy(app)
-
-@app.teardown_request
-def teardown_request(exception=None):
-	db.session.remove()
+db = MongoEngine(app)
 
 import skills.login
 import skills.forms

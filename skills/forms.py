@@ -1,7 +1,7 @@
-from skills import app, db
-from skills.models import User, Skill, UserSkill, ScoreDescription
+from skills import app
+from skills.models import *
 from flask import Flask, request, session, redirect, url_for, abort, render_template, flash
-from wtforms import Form, RadioField, validators
+from wtforms import Form, RadioField
 
 @app.route('/form/<int:pagenum>', methods=['GET', 'POST'])
 def form(pagenum):
@@ -9,12 +9,12 @@ def form(pagenum):
 		flash('You need to login first!')
 		return redirect(url_for('index'))
 	error = None
-	categories = [item.category for item in Skill.query.group_by(Skill.category).order_by(Skill.category).all()]
+	categories = [item.name for item in Category.objects.only('name')]
 	if not 0 <= pagenum < len(categories):
 		flash('Not a valid page.')
 		return redirect(url_for('index'))
-	scoredesc = {elem.score: elem.description for elem in ScoreDescription.query.order_by(ScoreDescription.score).all()}
-	user = User.query.filter_by(username=session.get('username')).first()
+	scoredesc = {item.score: item.description for item in ScoreDescription.objects}
+	user = User.objects(username=session.get('username')).get()
 	# Empty class to create form
 	class F(Form):
 		pass
@@ -22,20 +22,22 @@ def form(pagenum):
 	class Saved:
 		pass
 
-	skillslist = Skill.query.filter_by(category=categories[pagenum]).order_by(Skill.name).all()
-	for item in skillslist:
-		setattr(F, item.name, RadioField(item.name, [validators.Required()], 
-				choices=[('1',''),('2',''),('3',''),('4',''),('5','')]))
-	saved_skills = UserSkill.query.filter_by(userid=user.id).all()
-	for item in saved_skills:
-		setattr(Saved, item.skill, item.score)
+	category = Category.objects(name=categories[pagenum]).get()
+	skillslist = category.skills
+	skillslist.sort()
+	for skill in skillslist:
+		setattr(F, skill, RadioField(skill, choices=[('1',''),('2',''),('3',''),('4',''),('5','')]))
+	for item in user.skills:
+		setattr(Saved, item.name, item.score)
 	form = F(request.form, obj=Saved())
-	if request.method == 'POST' and form.validate():
+	if request.method == 'POST':
 		for field in request.form:
-			db.session.merge(UserSkill(user.id, field, request.form[field]))
-		db.session.commit()
+			curobj = User.objects(pk=user.pk, skills__name=field)
+			if curobj:
+				curobj.update(set__skills__S__score=request.form[field])
+			else:
+				user.skills.append(Skill(name=field, category=category.name, score=request.form[field]))
+				user.save()
 		flash('Saved successfully!')
 		return redirect(url_for('form', pagenum=pagenum))
-	elif request.method == 'POST':
-		error = "You didn't fill out the whole form. Please do that."
 	return render_template('form.html', form=form, categories=categories, pagenum=pagenum, scoredesc=scoredesc, error=error)

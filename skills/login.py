@@ -20,8 +20,9 @@ def index():
 	elif session.get('username'):
 		return redirect(url_for('form', pagenum=0))
 	if request.method == 'POST' and form.validate():
-		user = User.query.filter_by(username=request.form['username'], password=request.form['password']).first()
-		if not user is None:
+		user = User.objects(username=request.form['username'], password=request.form['password'])
+		if len(user) == 1:
+			user = user.get()
 			session['username'] = request.form['username']
 			session.pop('isadmin', None)
 			flash('Login successful!')
@@ -48,13 +49,12 @@ def register():
 	form = RegistrationForm(request.form)
 	error = None
 	if request.method == 'POST' and form.validate():
-		if User.query.filter_by(username=request.form['username']).count():
+		if User.objects(username=request.form['username']).count():
 			error = "Username already taken"
 		else:
-			newuser = User(request.form['username'], request.form['password'], 
-					request.form['firstname'], request.form['lastname'])
-			db.session.add(newuser)
-			db.session.commit()
+			newuser = User()
+			form.populate_obj(newuser)
+			newuser.save()
 			flash('Registration successful!')
 			return redirect(url_for('index'))
 	elif request.method == 'POST':
