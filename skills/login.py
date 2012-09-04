@@ -24,25 +24,24 @@ def index():
 def index_post():
 	form = LoginForm(request.form)
 	if form.validate():
-		user = User.objects(username=request.form['username'], password=request.form['password'])
-		if len(user) == 1:
-			user = user.get()
-			session['username'] = request.form['username']
-			session.pop('isadmin', None)
-			flash('Login successful!')
-			return redirect(create_url(user))
-		else:
-			error = 'Invalid username or password'
-	else:
-		error = "Can't leave any fields blank"
-	return render_template('index.html', form=form, error=error)
+		return login()
+	return render_template('index.html', form=form, error="Can't leave any fields blank")
+
+def login():
+	user = User.objects(username=request.form['username'], password=request.form['password'])
+	if len(user) == 1:
+		user = user.get()
+		session['username'] = request.form['username']
+		session.pop('isadmin', None)
+		flash('Login successful!')
+		return redirect(create_url(user))
+	return render_template('index.html', form=form, error='Invalid username or password')
 
 def create_url(user):
 	if user.isadmin:
 		session['isadmin'] = True
 		return url_for('admin')
-	else:
-		return url_for('form', pagenum=0)
+	return url_for('form', pagenum=0)
 
 @app.route('/logout/')
 def logout():
