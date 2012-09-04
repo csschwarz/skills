@@ -4,16 +4,16 @@
 <h3>{{ skillname }}</h3>
 
 <p>
-{% if userskills|length %}
+{% if userscores|length %}
 	<table>
 		<tr>
 			<th>Name</th>
 			<th>Score</th>
 		</tr>
-		{% for userskill in userskills %}
+		{% for userscore in userscores %}
 		<tr>
-			<td>{{ userskill[0].firstname }} {{ userskill[0].lastname }}</td>
-			<td class="score">{{ userskill[1][0].score }} ({{ scoredesc[userskill[1][0].score] }})</td>
+			<td>{{ userscore.user.firstname }} {{ userscore.user.lastname }}</td>
+			<td class="score">{{ userscore.score }} ({{ scoredesc[userscore.score] }})</td>
 		</tr>
 		{% endfor %}
 	</table>

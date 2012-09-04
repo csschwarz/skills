@@ -1,12 +1,12 @@
 <!doctype html>
 <html>
 	<head>
-		<title>HackSaw</title>
+		<title>Hacksaw</title>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 	</head>
 	<body>
 		<div class=page>
-			<h1>HackSaw</h1>
+			<h1>Hacksaw</h1>
 			{% for message in get_flashed_messages() %}
 				<p class=flash>{{ message }}</p>
 			{% endfor %}

@@ -27,8 +27,8 @@ def admin_skillstats(skill):
 		abort(401)
 	scoredesc = {item.score: item.description for item in ScoreDescription.objects}
 	users = User.objects(skills__name=skill)
-	userskills = []
+	userscores = []
 	for user in users:
-		userskills.append((user, [ x for x in user.skills if x.name==skill ]))
-	userskills = sorted(userskills, key=lambda userskill: userskill[1][0].score, reverse=True)
-	return render_template('admin_skillstats.html', skillname=skill, userskills=userskills, scoredesc=scoredesc)
+		userscores.append({'user': user, 'score': [ x.score for x in user.skills if x.name==skill ][0]})
+	userscores = sorted(userscores, key=lambda userscore: userscore['score'], reverse=True)
+	return render_template('admin_skillstats.html', skillname=skill, userscores=userscores, scoredesc=scoredesc)

@@ -1,4 +1,4 @@
-from skills import app, db
+from skills import app
 from skills.models import User
 from flask import Flask, request, session, redirect, url_for, abort, render_template, flash
 from wtforms import Form, TextField, RadioField, validators, PasswordField
@@ -11,31 +11,38 @@ class RegistrationForm(LoginForm):
 	firstname = TextField('firstname', [validators.Required()])
 	lastname = TextField('lastname', [validators.Required()])
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
 	form = LoginForm(request.form)
-	error = None
 	if session.get('username') and session.get('isadmin'):
 		return redirect(url_for('admin'))
 	elif session.get('username'):
 		return redirect(url_for('form', pagenum=0))
-	if request.method == 'POST' and form.validate():
+	return render_template('index.html', form=form)
+
+@app.route('/', methods=['POST'])
+def index_post():
+	form = LoginForm(request.form)
+	if form.validate():
 		user = User.objects(username=request.form['username'], password=request.form['password'])
 		if len(user) == 1:
 			user = user.get()
 			session['username'] = request.form['username']
 			session.pop('isadmin', None)
 			flash('Login successful!')
-			if user.isadmin:
-				session['isadmin'] = True
-				return redirect(url_for('admin'))
-			else:
-				return redirect(url_for('form', pagenum=0))
+			return redirect(create_url(user))
 		else:
 			error = 'Invalid username or password'
-	elif request.method == 'POST':
+	else:
 		error = "Can't leave any fields blank"
 	return render_template('index.html', form=form, error=error)
+
+def create_url(user):
+	if user.isadmin:
+		session['isadmin'] = True
+		return url_for('admin')
+	else:
+		return url_for('form', pagenum=0)
 
 @app.route('/logout/')
 def logout():
