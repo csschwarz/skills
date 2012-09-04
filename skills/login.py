@@ -2,6 +2,8 @@ from skills import app
 from skills.models import User
 from flask import Flask, request, session, redirect, url_for, abort, render_template, flash
 from wtforms import Form, TextField, RadioField, validators, PasswordField
+from create_user import create_user
+from login_user import login_user
 
 class LoginForm(Form):
 	username = TextField('username', [validators.Required()])
@@ -24,7 +26,7 @@ def index():
 def index_post():
 	form = LoginForm(request.form)
 	if form.validate():
-		return login(form)
+		return login_user(form)
 	return render_template('index.html', form=form, error="Can't leave any fields blank")
 
 @app.route('/logout/')
@@ -43,32 +45,4 @@ def register_post():
 	form = RegistrationForm(request.form)
 	if form.validate():
 		return create_user(form)
-	return render_template('register.html', form=form, error="Can't leave any fields blank")
-
-def create_user(form):
-	if user_exists():
-		return render_template('register.html', form=form, error="Username already taken")
-	new_user = User()
-	form.populate_obj(new_user)
-	new_user.save()
-	flash('Registration successful!')
-	return redirect(url_for('index'))
-
-def user_exists():
-	return User.objects(username=request.form['username']).count()	
-
-def login(form):
-	user = User.objects(username=request.form['username'], password=request.form['password'])
-	if len(user) == 1:
-		user = user.get()
-		session['username'] = request.form['username']
-		session.pop('isadmin', None)
-		flash('Login successful!')
-		return redirect(role_specific_url(user))
-	return render_template('index.html', form=form, error='Invalid username or password')
-
-def role_specific_url(user):
-	if user.isadmin:
-		session['isadmin'] = True
-		return url_for('admin')
-	return url_for('form', pagenum=0)
+	return render_template('register.html', form=form, error="Can't leave any fields blank")	
