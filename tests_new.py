@@ -6,8 +6,6 @@ import skills
 
 class SkillsTestCase(TestCase):
 
-### BEGIN SETUP ###
-
 	def create_app(self):
 		app = Flask(__name__)
 		app.config['TESTING'] = True

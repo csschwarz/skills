@@ -1,8 +1,7 @@
 from skills import app
-from skills.models import User
+from skills.model import User
 from flask import Flask, request, session, redirect, url_for, abort, render_template, flash
 from wtforms import Form, TextField, RadioField, validators, PasswordField
-from create_user import create_user
 from login_user import login_user
 
 class LoginForm(Form):
@@ -42,7 +41,14 @@ def register():
 
 @app.route('/register/', methods=['POST'])
 def register_post():
+	error = "Can't leave any fields blank"
 	form = RegistrationForm(request.form)
 	if form.validate():
-		return create_user(form)
-	return render_template('register.html', form=form, error="Can't leave any fields blank")	
+		new_user = User()
+		form.populate_obj(new_user)
+		if new_user.create():
+			flash('Registration successful!')
+			return redirect(url_for('index'))
+		else:
+			error = "User already exists"
+	return render_template('register.html', form=form, error=error)	
