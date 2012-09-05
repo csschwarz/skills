@@ -1,4 +1,4 @@
-from skills.models import User
+from skills.model import User
 from flask import Flask, request, session, redirect, url_for, abort, render_template, flash
 from wtforms import Form
 

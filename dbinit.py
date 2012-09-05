@@ -1,4 +1,4 @@
-from skills.models import *
+from skills.model import *
 
 User.drop_collection()
 Category.drop_collection()
