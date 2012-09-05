@@ -2,13 +2,13 @@
 {% block body %}
 {% if error %}<p class=error><strong>Error:</strong> {{ error }}</p>{% endif %}
 <h3>Register</h3>
-<form action="{{ url_for('register_post') }}" method=post>
+<form action="{{ url_for('user.register_post') }}" method=post>
 	<p><label for="username">Username</label> {{ form.username }}</p>
 	<p><label for="password">Password</label> {{ form.password }}</p>
 	<p><label for="firstname">First name</label> {{ form.firstname }}</p>
 	<p><label for="lastname">Last name</label> {{ form.lastname }}</p>
 	<p><input type=submit value=Submit></p>
 </form>
-<a href="{{ url_for('index') }}">Cancel</a>
+<a href="{{ url_for('user.index') }}">Cancel</a>
 
 {% endblock %}

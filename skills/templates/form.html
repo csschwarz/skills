@@ -5,7 +5,7 @@
 <h2>
 	{% for i in range(categories|length) %}
 		{% if not i==pagenum %}
-			<a href="{{ url_for('form', pagenum=i) }}">{{ categories[i] }}</a>
+			<a href="{{ url_for('form_page.form', pagenum=i) }}">{{ categories[i] }}</a>
 		{% else %}
 			{{ categories[i] }}
 		{% endif %} 
@@ -13,7 +13,7 @@
 	{% endfor %}
 </h2>
 <p><strong>Not relevant?</strong> If these skills don't apply to you, you can skip this section.</p>
-<form action="{{ url_for('form', pagenum=pagenum) }}" method=post>
+<form action="{{ url_for('form_page.form', pagenum=pagenum) }}" method=post>
 	<table>
 		<tr>
 			<th>Skill</th>

@@ -1,8 +1,10 @@
 from skills.model import *
-from flask import Flask, request, session, redirect, url_for, abort, render_template, flash
+from flask import current_app, Blueprint, Flask, request, session, redirect, url_for, abort, render_template, flash
 from wtforms import Form, RadioField
 
-@app.route('/form/<int:pagenum>', methods=['GET', 'POST'])
+form_page = Blueprint('form_page', __name__)
+
+@form_page.route('/form/<int:pagenum>', methods=['GET', 'POST'])
 def form(pagenum):
 	if not session.get('username'):
 		flash('You need to login first!')
@@ -38,5 +40,5 @@ def form(pagenum):
 				user.skills.append(Skill(name=field, category=category.name, score=request.form[field]))
 				user.save()
 		flash('Saved successfully!')
-		return redirect(url_for('form', pagenum=pagenum))
+		return redirect(url_for('form_page.form', pagenum=pagenum))
 	return render_template('form.html', form=form, categories=categories, pagenum=pagenum, scoredesc=scoredesc, error=error)

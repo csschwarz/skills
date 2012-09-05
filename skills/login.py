@@ -49,7 +49,7 @@ def register_post():
 		form.populate_obj(new_user)
 		if new_user.create():
 			flash('Registration successful!')
-			return redirect(url_for('index'))
+			return redirect(url_for('user.index'))
 		else:
 			error = "User already exists"
 	return render_template('register.html', form=form, error=error)	
