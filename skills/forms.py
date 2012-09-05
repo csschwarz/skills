@@ -1,4 +1,3 @@
-from skills import app
 from skills.model import *
 from flask import Flask, request, session, redirect, url_for, abort, render_template, flash
 from wtforms import Form, RadioField
