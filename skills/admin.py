@@ -1,7 +1,9 @@
 from skills.model import *
-from flask import Flask, request, session, redirect, url_for, abort, render_template, flash
+from flask import current_app, Blueprint, Flask, request, session, redirect, url_for, abort, render_template, flash 
 
-@app.route('/admin/')
+admin_page = Blueprint('admin_page', __name__)
+
+@admin_page.route('/admin/')
 def admin():
 	if not session.get('isadmin'):
 		abort(401)
@@ -9,7 +11,7 @@ def admin():
 	allskills = Category.objects
 	return render_template('admin_index.html', users=users, allskills=allskills)
 
-@app.route('/admin/viewuser/<username>')
+@admin_page.route('/admin/viewuser/<username>')
 def admin_userstats(username):
 	if not session.get('isadmin'):
 		abort(401)
@@ -20,7 +22,7 @@ def admin_userstats(username):
 	skills = sorted(skills, key=lambda skill: skill['category'])
 	return render_template('admin_userstats.html', user=user, skills=skills, categories=categories, scoredesc=scoredesc)
 
-@app.route('/admin/viewskill/<skill>')
+@admin_page.route('/admin/viewskill/<skill>')
 def admin_skillstats(skill):
 	if not session.get('isadmin'):
 		abort(401)

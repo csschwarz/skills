@@ -3,7 +3,7 @@
 
 <h3>{{ user['firstname'] }} {{ user['lastname'] }}</h3>
 
-<p><a href="{{ url_for('admin') }}">Back</a></p>
+<p><a href="{{ url_for('admin_page.admin') }}">Back</a></p>
 
 	<div>
 		<p>
@@ -29,6 +29,6 @@
 		{% endif %}
 	</div>
 
-<p><a href="{{ url_for('admin') }}">Back</a></p>
+<p><a href="{{ url_for('admin_page.admin') }}">Back</a></p>
 
 {% endblock %}

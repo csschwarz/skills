@@ -11,7 +11,7 @@
 		</tr>
 		{% for user in users %}
 		<tr>
-			<td><a href="{{ url_for('admin_userstats', username=user.username) }}">{{ user.username }}</a></td>
+			<td><a href="{{ url_for('admin_page.admin_userstats', username=user.username) }}">{{ user.username }}</a></td>
 			<td>{{ user.firstname }}</td>
 			<td>{{ user.lastname }}</td>
 		</tr>
@@ -33,7 +33,7 @@
 		{% for category in allskills %}
 		{% for skill in category.skills %}
 		<tr>
-			<td><a href="{{ url_for('admin_skillstats', skill=skill) }}">{{ skill }}</a></td>
+			<td><a href="{{ url_for('admin_page.admin_skillstats', skill=skill) }}">{{ skill }}</a></td>
 			<td>{{ category.name }}</td>
 		</tr>
 		{% endfor %}

@@ -9,9 +9,10 @@ def create_app(config_filename):
 	app.config.from_pyfile(config_filename) 
 
 	from skills.login import user
+	from skills.admin import admin_page
 	#import skills.forms
-	#import skills.admin
-	app.register_blueprint(user)
+	app.register_blueprint(user) 
+	app.register_blueprint(admin_page)
 	
 	connect(app.config['MONGODB_DB'])
 

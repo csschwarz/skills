@@ -15,5 +15,5 @@ def login_user(form):
 def _role_specific_url(user):
 	if user.isadmin:
 		session['isadmin'] = True
-		return url_for('admin')
+		return url_for('admin_page.admin')
 	return url_for('form', pagenum=0)

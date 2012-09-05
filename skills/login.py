@@ -17,7 +17,7 @@ class RegistrationForm(LoginForm):
 def index():
 	form = LoginForm(request.form)
 	if session.get('username') and session.get('isadmin'):
-		return redirect(url_for('admin'))
+		return redirect(url_for('admin_page.admin'))
 	if session.get('username'):
 		return redirect(url_for('form', pagenum=0))
 	return render_template('index.html', form=form)
@@ -34,7 +34,7 @@ def logout():
 	session.pop('username', None)
 	session.pop('isadmin', None)
 	flash('You have been logged out.')
-	return redirect(url_for('index'))
+	return redirect(url_for('user.index'))
 
 @user.route('/register/', methods=['GET'])
 def register():
