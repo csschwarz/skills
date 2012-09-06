@@ -24,6 +24,11 @@ class AdminTestCase(TestCase):
 		resp = self.client.get('/admin/viewskill/Java')
 		assert 'Test User' in resp.data
 
+	def test_view_single_user(self):
+		self.login('admin', 'admin')
+		resp = self.client.get('/admin/viewuser/test')
+		assert 'Java' in resp.data
+
 	def login(self, username, password):
 		return self.client.post('/', data=dict(
 			username=username,
