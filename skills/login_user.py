@@ -10,7 +10,7 @@ def login_user(form):
 		session.pop('isadmin', None)
 		flash('Login successful!')
 		return redirect(_role_specific_url(user))
-	return render_template('index.html', form=form, error='Invalid username or password')
+	return render_template('index.html', form=form, error='Invalid username or password', title='Home')
 
 def _role_specific_url(user):
 	if user.isadmin:

@@ -16,11 +16,11 @@ class AdminTestCase(TestCase):
 
 	def test_invalid_login(self):
 		resp = self.login('fake', 'fake')
-		assert '<p class="error"><strong>Error:</strong> Invalid' in resp.data
+		assert '<div class="error"><strong>Error:</strong> Invalid' in resp.data
 
 	def test_blank_login_fails(self):
 		resp = self.login()
-		assert '<p class="error"><strong>Error:</strong> Can' in resp.data
+		assert '<div class="error"><span class="error-key">Error:</span> Can' in resp.data
 
 	def test_admin_console(self):
 		resp = self.login('admin', 'admin', 'Admin')
