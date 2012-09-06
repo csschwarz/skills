@@ -7,9 +7,6 @@ import dbinit
 
 class AdminTestCase(TestCase):
 
-	BASE_URL = 'http://127.0.0.1:5001'
-	ADMIN_URL = BASE_URL + '/admin/'
-
 	def create_app(self):
 		return create_app('test_config.py')
 
@@ -19,10 +16,13 @@ class AdminTestCase(TestCase):
 
 	def test_invalid_login(self):
 		resp = self.login('fakeuser', 'fakepass')
-		assert 'Invalid' in resp
+		assert '<p class="error"><strong>Error:</strong> Invalid' in resp.data
 
 	def test_view_all_users_with_java(self):
-		self.login('admin', 'admin')
+		resp = self.login('admin', 'admin')
+		assert '<title>Hacksaw - Admin</title>' in resp.data
+		resp = self.client.get('/admin/viewskill/Java')
+		assert 'Test User' in resp.data
 
 	def login(self, username, password):
 		return self.client.post('/', data=dict(

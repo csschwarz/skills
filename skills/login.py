@@ -20,14 +20,14 @@ def index():
 		return redirect(url_for('admin_page.admin'))
 	if session.get('username'):
 		return redirect(url_for('form', pagenum=0))
-	return render_template('index.html', form=form)
+	return render_template('index.html', form=form, title='Home')
 
 @user.route('/', methods=['POST'])
 def index_post():
 	form = LoginForm(request.form)
 	if form.validate():
 		return login_user(form)
-	return render_template('index.html', form=form, error="Can't leave any fields blank")
+	return render_template('index.html', form=form, error="Can't leave any fields blank", title='Home')
 
 @user.route('/logout/')
 def logout():
@@ -38,7 +38,7 @@ def logout():
 
 @user.route('/register/', methods=['GET'])
 def register():
-	return render_template('register.html', form=RegistrationForm(request.form), error=None)
+	return render_template('register.html', form=RegistrationForm(request.form), error=None, title='Register')
 
 @user.route('/register/', methods=['POST'])
 def register_post():
@@ -52,4 +52,4 @@ def register_post():
 			return redirect(url_for('user.index'))
 		else:
 			error = "User already exists"
-	return render_template('register.html', form=form, error=error)	
+	return render_template('register.html', form=form, error=error, title='Register')	

@@ -9,7 +9,7 @@ def admin():
 		abort(401)
 	users = User.objects(skills__not__size=0).order_by('lastname')
 	allskills = Category.objects
-	return render_template('admin_index.html', users=users, allskills=allskills)
+	return render_template('admin_index.html', users=users, allskills=allskills, title='Admin')
 
 @admin_page.route('/admin/viewuser/<username>')
 def admin_userstats(username):
@@ -20,7 +20,8 @@ def admin_userstats(username):
 	categories = [item.name for item in Category.objects.only('name')]
 	skills = sorted(user.skills, key=lambda skill: skill['score'], reverse=True)
 	skills = sorted(skills, key=lambda skill: skill['category'])
-	return render_template('admin_userstats.html', user=user, skills=skills, categories=categories, scoredesc=scoredesc)
+	return render_template('admin_userstats.html', user=user, skills=skills, 
+			categories=categories, scoredesc=scoredesc, title='Admin - View User')
 
 @admin_page.route('/admin/viewskill/<skill>')
 def admin_skillstats(skill):
@@ -32,4 +33,5 @@ def admin_skillstats(skill):
 	for user in users:
 		userscores.append({'user': user, 'score': [ x.score for x in user.skills if x.name==skill ][0]})
 	userscores = sorted(userscores, key=lambda userscore: userscore['score'], reverse=True)
-	return render_template('admin_skillstats.html', skillname=skill, userscores=userscores, scoredesc=scoredesc)
+	return render_template('admin_skillstats.html', skillname=skill, userscores=userscores, 
+			scoredesc=scoredesc, title='Admin - View Skill')

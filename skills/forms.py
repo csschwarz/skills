@@ -41,4 +41,5 @@ def form(pagenum):
 				user.save()
 		flash('Saved successfully!')
 		return redirect(url_for('form_page.form', pagenum=pagenum))
-	return render_template('form.html', form=form, categories=categories, pagenum=pagenum, scoredesc=scoredesc, error=error)
+	return render_template('form.html', form=form, categories=categories, 
+			pagenum=pagenum, scoredesc=scoredesc, error=error, title='Capabilities')
