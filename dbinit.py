@@ -35,6 +35,10 @@ def seed():
 	Category(name='Testing', skills=testing_skills).save()
 	Category(name='Programming', skills=programming_skills).save()
 
+	user = User.objects(username='test').get()
+	user.skills.append(Skill(name='Java', category='Programming', score=4, wanttolearn=True))
+	user.save()
+
 if __name__ == '__main__':
 	connect()
 	drop_all()
